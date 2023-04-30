@@ -38,6 +38,7 @@
         </form>
       </div>
     </div>
+    <a href="https://www.weatherapi.com/" title="Free Weather API"><img src='//cdn.weatherapi.com/v4/images/weatherapi_logo.png' alt="Weather data by WeatherAPI.com" border="0"></a>
   </nav>
   <div class="row">
     <nav class="col-sm-2">
@@ -58,11 +59,18 @@
     </nav>
     <main class="col">
       <h1 class="display-1">Project 3</h1>
-      <p class="lead">This project does these things that I briefly explain here and followup a bit more with details
-        and demo below.</p>
-      <ul id="rhyme-results">
+      <p class="lead">This project gathers the top 5 most populus cities from the searched country and displays
+        them as buttons to the user. The buttons can be clicked to reveal the current weather conditions for the city.
+      </p>
+      <div>
+        Filter by:
+        <button id="pop-filter">Population</button>
+        <button id="city-filter">City Name (A-Z)</button>
+        <button id="country-filter">Country Name (A-Z)</button>
+      </div>
+      <ul id="city-results">
       </ul>
-      <section id="book-results">
+      <section id="weather-results">
       </section>
     </main>
     <div class="col-md-2"></div>
