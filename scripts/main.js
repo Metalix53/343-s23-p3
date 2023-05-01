@@ -2,7 +2,7 @@
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': '187edf7988msh71648752f018815p194247jsn19f9c16bb36a',
+		'X-RapidAPI-Key': '',
 		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
 	}
 };
