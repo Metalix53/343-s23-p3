@@ -136,10 +136,15 @@ searchForm.onsubmit = (ev) => {
     console.log("Country", countryResults);
 
     const cityListItems = countryResults.data.map(countryInfo2DOM);
-
-    cityListItems.forEach((cityli) => {
-      citiesUL.appendChild(cityli);
-    });
+    if(document.getElementById(countryResults.data[0].city) == null)
+    {
+      cityListItems.forEach((cityli) => {
+        citiesUL.appendChild(cityli);
+      });
+    }
+  })
+  .catch((err) => {
+    alert("Error finding country! Keep in mind, country names are case sensitive!")
   });
 };
 
@@ -168,6 +173,10 @@ const countryInfo2DOM = (countryObj) => {
   cityButton.textContent = countryObj.city + `: ` + countryObj.country + ` (${countryObj.countryCode})` + ` Population: ${countryObj.population}`;
   cityButton.onclick = getCityWeather;
   cityButton.countryinfo = countryObj;
+  cityButton.style.backgroundColor = "lightskyblue"
+  cityButton.style.borderColor = "black"
+  cityButton.style.marginBottom = "5px"
+  cityButton.style.marginTop = "5px"
   cityListItem.appendChild(cityButton);
   cityListItem.style.listStyleType = 'none'
   cityListItem.id = countryObj.city;
@@ -178,21 +187,31 @@ const countryInfo2DOM = (countryObj) => {
 // Get the weather of the selected city, uses latitude and longitude for accuracy
 // Calls the weather2DOM method to create an element from the info and add it to the page
 const getCityWeather = (ev) => {
-  const cityInfo = ev.target.textContent.split(":");
-  const city = cityInfo[0];
-  const cityElement = document.getElementById(`button ${city}`);
-  const lat = ev.target.countryinfo.latitude;
-  const long = ev.target.countryinfo.longitude;
-  console.log("attempting to get weather for", city);
-  return fetch(`https://api.weatherapi.com/v1/current.json?key=bad9cf9a33804e64bb9205228232904&q=${lat},${long}&aqi=no`).then((r) =>
-    r.json()
-  ).then((weatherResults)=> {
-    console.log(weatherResults);
-    if (cityElement.childNodes.length == 1){
-      const weatherElem = weather2DOM(weatherResults); 
-      cityElement.appendChild(weatherElem);
-    }
-  })
+  try
+  {
+    const cityInfo = ev.target.textContent.split(":");
+    const city = cityInfo[0];
+    const cityElement = document.getElementById(`button ${city}`);
+    const lat = ev.target.countryinfo.latitude;
+    const long = ev.target.countryinfo.longitude;
+    console.log("attempting to get weather for", city);
+    return fetch(`https://api.weatherapi.com/v1/current.json?key=bad9cf9a33804e64bb9205228232904&q=${lat},${long}&aqi=no`).then((r) =>
+      r.json()
+    ).then((weatherResults)=> {
+      console.log(weatherResults);
+      if (cityElement.childNodes.length == 1){
+        const weatherElem = weather2DOM(weatherResults); 
+        cityElement.appendChild(weatherElem);
+      }
+    })
+    .catch((err) => {
+      alert("Error getting weather data for that city!")
+    })
+  }
+  catch{
+    console.log("Weather already displayed")
+  }
+
 };
 
 const weather2DOM = (weatherObj) => {
