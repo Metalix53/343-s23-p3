@@ -195,7 +195,7 @@ const getCityWeather = (ev) => {
     const lat = ev.target.countryinfo.latitude;
     const long = ev.target.countryinfo.longitude;
     console.log("attempting to get weather for", city);
-    return fetch(`https://api.weatherapi.com/v1/current.json?key=bad9cf9a33804e64bb9205228232904&q=${lat},${long}&aqi=no`).then((r) =>
+    return fetch(`https://api.weatherapi.com/v1/current.json?&q=${lat},${long}&aqi=no`).then((r) =>
       r.json()
     ).then((weatherResults)=> {
       console.log(weatherResults);
