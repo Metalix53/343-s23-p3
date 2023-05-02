@@ -2,18 +2,18 @@
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': '',
+		'X-RapidAPI-Key': '187edf7988msh71648752f018815p194247jsn19f9c16bb36a',
 		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
 	}
 };
 
 // Declare the results list up here so the filter functions can edit it
-let citiesUL = document.getElementById("city-results");
+const citiesUL = document.getElementById("city-results");
 
 // Filters results in descending order by population
 const popFilter = document.getElementById("pop-filter");
 popFilter.onclick = (ev) => {
-  citiesUL = document.getElementById("city-results")
+  const citiesUL = document.getElementById("city-results")
   const cityElems = citiesUL.childNodes
   const newCityUL = document.createElement('ul')
   newCityUL.id = "city-results";
@@ -27,7 +27,11 @@ popFilter.onclick = (ev) => {
     cityElems.forEach((elem) => {
       const popInd = elem.textContent.indexOf("Population") + 12
       let pop = elem.textContent.substring(popInd)
-      const endInd = pop.indexOf("C")
+      let endInd = pop.indexOf("Current")
+      if (endInd == -1)
+      {
+        endInd = elem.textContent.length
+      }
       pop = pop.substring(0, endInd)
       idPopMap.set(elem.id, pop)
     });
@@ -40,9 +44,6 @@ popFilter.onclick = (ev) => {
       console.log(elem)
       newCityUL.appendChild(elem)
     }
-    while (citiesUL.firstChild){
-      citiesUL.removeChild(citiesUL.firstChild)
-    }
     citiesUL.replaceWith(newCityUL)
   }
 };
@@ -50,7 +51,7 @@ popFilter.onclick = (ev) => {
 // Filters results by city alphabetically
 const cityFilter = document.getElementById("city-filter");
 cityFilter.onclick = (ev) => {
-  citiesUL = document.getElementById("city-results")
+  const citiesUL = document.getElementById("city-results")
   const cityElems = citiesUL.childNodes
   const newCityUL = document.createElement('ul')
   newCityUL.id = "city-results";
@@ -62,8 +63,14 @@ cityFilter.onclick = (ev) => {
   {
     let idPopMap = new Map()
     cityElems.forEach((elem) => {
-      const textList = elem.textContent.split(" ")
-      const pop = textList[textList.length-1]
+      const popInd = elem.textContent.indexOf("Population") + 12
+      let pop = elem.textContent.substring(popInd)
+      let endInd = pop.indexOf("Current")
+      if (endInd == -1)
+      {
+        endInd = elem.textContent.length
+      }
+      pop = pop.substring(0, endInd)
       idPopMap.set(elem.id, pop)
     });
     idPopMap = new Map([...idPopMap.entries()].sort())
@@ -75,9 +82,6 @@ cityFilter.onclick = (ev) => {
       console.log(elem)
       newCityUL.appendChild(elem)
     }
-    while (citiesUL.firstChild){
-      citiesUL.removeChild(citiesUL.firstChild)
-    }
     citiesUL.replaceWith(newCityUL)
   }
 };
@@ -85,7 +89,7 @@ cityFilter.onclick = (ev) => {
 // Filters the results by country alphabetically
 const countryFilter = document.getElementById("country-filter");
 countryFilter.onclick = (ev) => {
-  citiesUL = document.getElementById("city-results")
+  const citiesUL = document.getElementById("city-results")
   const cityElems = citiesUL.childNodes
   const newCityUL = document.createElement('ul')
   newCityUL.id = "city-results";
@@ -113,9 +117,6 @@ countryFilter.onclick = (ev) => {
       console.log(elem)
       newCityUL.appendChild(elem)
     }
-    while (citiesUL.firstChild){
-      citiesUL.removeChild(citiesUL.firstChild)
-    }
     citiesUL.replaceWith(newCityUL)
   }
 };
@@ -127,7 +128,7 @@ searchForm.onsubmit = (ev) => {
   console.log("submitted top-search with", ev);
   ev.preventDefault();
   const formData = new FormData(ev.target);
-
+  const citiesUL = document.getElementById("city-results")
   const queryText = formData.get("query");
   console.log("queryText", queryText);
 
@@ -138,6 +139,7 @@ searchForm.onsubmit = (ev) => {
     const cityListItems = countryResults.data.map(countryInfo2DOM);
     if(document.getElementById(countryResults.data[0].city) == null)
     {
+      console.log("made it past if statement")
       cityListItems.forEach((cityli) => {
         citiesUL.appendChild(cityli);
       });
@@ -195,7 +197,7 @@ const getCityWeather = (ev) => {
     const lat = ev.target.countryinfo.latitude;
     const long = ev.target.countryinfo.longitude;
     console.log("attempting to get weather for", city);
-    return fetch(`https://api.weatherapi.com/v1/current.json?&q=${lat},${long}&aqi=no`).then((r) =>
+    return fetch(`https://api.weatherapi.com/v1/current.json?&key=bad9cf9a33804e64bb9205228232904&q=${lat},${long}&aqi=no`).then((r) =>
       r.json()
     ).then((weatherResults)=> {
       console.log(weatherResults);
